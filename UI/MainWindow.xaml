@@ -1,0 +1,316 @@
+﻿<Window x:Class="UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="650">
+    <Window.Resources>
+        <local:TestToColor x:Key="TestToColor" />
+        <local:YesNoToBooleanConverter x:Key="YesNoToBooleanConverter" />
+        <local:ModeListConverter x:Key="ModeListConverter" />
+        <local:ModeItemConverter x:Key="ModeItemConverter" />
+    </Window.Resources>
+    <Grid>
+        <DockPanel LastChildFill="True">
+            
+            <Menu DockPanel.Dock="right">
+                <Menu.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </Menu.ItemsPanel>
+                <Button Click="ClickAddStudent" Content="New Student" Width="100"/>
+                <Button Click="ClickAddTeacher" Content="New Teacher" Width="100"/>
+                <Button Content="New MeetTest" Width="100" Click="ClickAddMeetTest"/>
+                <Button Content="New User" Width="100"/>
+                <Separator Height="10" HorizontalAlignment="Center">
+                </Separator>
+                <Button Content="Show" Width="100"/>
+                <Button Content="Edit" Width="100" Click="ClickEdit"/>
+                <Button Click="ClickDelete" Content="Delete" Width="100"/>
+                <Separator Height="10" HorizontalAlignment="Center">
+                </Separator>
+                <Button Content="save changes" Width="100" Click="Button_Click_1"/>
+
+            </Menu>
+            <Button DockPanel.Dock="Bottom" Content="modeReplace" Click="Button_Click"></Button>
+            <Grid DockPanel.Dock="top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock MouseDown="Hi_MouseRightButtonDown" x:Name="hi" Grid.Column="2"></TextBlock>
+                <Button Visibility="Collapsed" Grid.Column="2" Content="filters"
+             Name="label"  />
+                <Menu Grid.Column="1">
+                    <MenuItem Header="newFillter">
+                        <MenuItem Header="FindMoreTeacher" ItemsSource="{Binding FindMoreTeacher}">
+                            <MenuItem.ItemTemplate>
+                                <DataTemplate>
+                                    <MenuItem Header="{Binding}" Click="MenuItem_ClickTeacherName"></MenuItem>
+                                </DataTemplate>
+                            </MenuItem.ItemTemplate>
+                        </MenuItem>
+                        <MenuItem Header="FindMoreSchool" ItemsSource="{Binding FindMoreSchool}">
+                            <MenuItem.ItemTemplate>
+                                <DataTemplate>
+                                    <MenuItem Header="{Binding}" Click="MenuItem_ClickMoreSchool"></MenuItem>
+                                </DataTemplate>
+                            </MenuItem.ItemTemplate>
+                        </MenuItem>
+                        <MenuItem Header="FindmeetTestGrade" ItemsSource="{Binding FindmeetTestGrade}">
+                            <MenuItem.ItemTemplate>
+                                <DataTemplate>
+                                    <MenuItem Header="{Binding}" Click="MenuItem_Click_1FindmeetTestGrade"></MenuItem>
+                                </DataTemplate>
+                            </MenuItem.ItemTemplate>
+                        </MenuItem>
+                        <MenuItem Header="FindmeetTestGrade">
+                            <Label Content="start from"></Label>  
+                            <Slider x:Name="startFrom" Width="100" />
+                            <Label Content="until"></Label>
+                            <Slider x:Name="endFrom" Width="100" />
+                            <Label Content="Apply!" MouseLeftButtonDown="Label_MouseLeftButtonDown"></Label>
+                        </MenuItem>
+                        <MenuItem Header="FindteacherByDistanceofTest">
+                            <Label Content="where"></Label>
+                            <TextBox x:Name="Wheredistance" Width="100" />
+                            <Label Content="Apply!" MouseLeftButtonDown="Label_MouseLeftButtonDown_2"></Label>
+                        </MenuItem>
+                        <MenuItem Header="ByName">
+                            <TextBox x:Name="Byname" Width="100" />
+                            <Label MouseLeftButtonDown="Label_MouseLeftButtonDown_1"  Content="Apply!"></Label>
+                        </MenuItem>
+                        <MenuItem Header="ByDateTest">
+                            <DatePicker MouseLeftButtonDown="DatePicker_MouseLeftButtonDown"  Width="100" />  
+                        </MenuItem>
+                    </MenuItem>
+                </Menu>
+
+                <ComboBox SelectionChanged="groping_SelectionChanged" ItemsSource="{Binding FindGroups}"
+             Name="groping" />
+                
+            </Grid>
+            <ListBox DockPanel.Dock="Top" x:Name="Listfillters" ItemsSource="{Binding Filters, UpdateSourceTrigger=Explicit}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock TextWrapping="Wrap">
+                                 <TextBlock Text="{Binding FuncName, UpdateSourceTrigger=Explicit}"></TextBlock>
+                            <TextBlock Text=" | "></TextBlock>
+                                <TextBlock Text="{Binding Prop, UpdateSourceTrigger=Explicit}"></TextBlock>
+                            <Button Click="Button_Click_2" Tag="{Binding Id, UpdateSourceTrigger=Explicit}">x</Button>
+                                </TextBlock>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <GroupBox Header="" DockPanel.Dock="left">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" >
+                    <DockPanel LastChildFill="false" >
+                        <!--ListView Margin="10" Name="lvUsers" ItemsSource="{Binding Filters}" DockPanel.Dock="top">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Func" Width="120" DisplayMemberBinding="{Binding FuncName}" />
+                                    <GridViewColumn Header="Prop" Width="100" DisplayMemberBinding="{Binding Prop}" />
+                                    <GridViewColumn Header="id" Width="30" DisplayMemberBinding="{Binding Id}" />
+                                </GridView>
+                            </ListView.View>
+                        </-->
+                        <DockPanel DockPanel.Dock="top" Visibility="{Binding Converter={StaticResource ModeListConverter}, UpdateSourceTrigger=Explicit}">
+                            <Label DockPanel.Dock="Top">Students:</Label>
+                            <ListView SelectionMode="Single" Selector.SelectionChanged="lstNames_SelectionChanged" ItemsSource="{Binding Items}" DockPanel.Dock="top" x:Name="lstNames10">
+                                <ListView.ItemContainerStyle>
+                                    <Style>
+                                        <Setter Property="Control.Visibility"
+                                          Value="{Binding Converter={StaticResource YesNoToBooleanConverter}, 
+                                          Path=Id, UpdateSourceTrigger=Explicit}"/>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+
+                                <ListView.View>
+                                    <GridView>
+                                    <GridViewColumn Header="Id" Width="70" DisplayMemberBinding="{Binding Id}" />
+                                    <GridViewColumn Header="First Name" Width="100" DisplayMemberBinding="{Binding FirstName}" />
+                                    <GridViewColumn Header="Last Name" Width="100" DisplayMemberBinding="{Binding LastName}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                            <Label DockPanel.Dock="Top">Teachers:</Label>
+                            <ListView SelectionMode="Single"  Selector.SelectionChanged="lstNames_SelectionChanged" ItemsSource="{Binding Items2}" DockPanel.Dock="top" x:Name="lstNames11">
+                                <ListView.ItemContainerStyle>
+                                    <Style>
+                                        <Setter Property="Control.Visibility"
+                                          Value="{Binding Converter={StaticResource YesNoToBooleanConverter}, 
+                                          Path=Id, UpdateSourceTrigger=Explicit}"/>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Id" Width="70" DisplayMemberBinding="{Binding Id}" />
+                                        <GridViewColumn Header="First Name" Width="100" DisplayMemberBinding="{Binding FirstName}" />
+                                        <GridViewColumn Header="Last Name" Width="100" DisplayMemberBinding="{Binding LastName}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                            <Label DockPanel.Dock="Top">Tests:</Label>
+                            <ListView SelectionMode="Single" Selector.SelectionChanged="lstNames_SelectionChanged" ItemsSource="{Binding Items3}" DockPanel.Dock="top" x:Name="lstNames12">
+                                <ListView.ItemContainerStyle>
+                                    <Style>
+                                        <Setter Property="Control.Visibility"
+                                          Value="{Binding Converter={StaticResource YesNoToBooleanConverter}, 
+                                          Path=TestId, UpdateSourceTrigger=Explicit}"/>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="TestId" Width="70" DisplayMemberBinding="{Binding TestId}" />
+                                        <GridViewColumn Header="StudentId" Width="100" DisplayMemberBinding="{Binding StudentId}" />
+                                        <GridViewColumn Header="TestAddress" Width="100" DisplayMemberBinding="{Binding TestAddress}" />
+                                        <GridViewColumn Header="TeacherId" Width="100" DisplayMemberBinding="{Binding TeacherId}" />
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </DockPanel>
+                        <!--students-->
+                        <DockPanel DockPanel.Dock="top" Visibility="{Binding Converter={StaticResource ModeItemConverter}, UpdateSourceTrigger=Explicit}">
+
+                            <Expander IsExpanded="True" Header="{Binding Num}" DockPanel.Dock="top">
+                            <GroupBox Header="" Background="#FFE5E5E5">
+                                <ListBox Selector.SelectionChanged="lstNames_SelectionChanged"  x:Name="lstNames" ItemsSource="{Binding Items}">
+                                    <ListBox.Template>
+                                        <ControlTemplate>
+                                            <ItemsPresenter/>
+                                        </ControlTemplate>
+                                    </ListBox.Template>
+                                    <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <DockPanel  Margin="5" Width="120" Visibility="{Binding Path=Id, Converter={StaticResource YesNoToBooleanConverter}, UpdateSourceTrigger=Explicit}">
+                                                    <Border Height="40" Width="50" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
+                                                    <!--TextBlock Text="someText" VerticalAlignment="Center" TextAlignment="Center"/-->
+                                                    <Image Source="https://image.freepik.com/free-icon/user-shape_318-42150.jpg" />
+                                                </Border>
+
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Path=Id}" TextAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Path=FirstName}" TextAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Path=LastName}" TextAlignment="Center"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel IsItemsHost="True"/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                </ListBox>
+                            </GroupBox>
+                        </Expander>
+                        <!--Teachers-->
+                            <Expander IsExpanded="True" Header="{Binding Num2}" DockPanel.Dock="top">
+                            <GroupBox Header="" Background="#FFE5E5E5">
+                                <ListBox Selector.SelectionChanged="lstNames_SelectionChanged" ItemsSource="{Binding Items2}" x:Name="lstNames2">
+                                    <ListBox.Template>
+                                        <ControlTemplate>
+                                            <ItemsPresenter/>
+                                        </ControlTemplate>
+                                    </ListBox.Template>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <DockPanel Margin="5" Width="120" Visibility="{Binding Path=Id, Converter={StaticResource YesNoToBooleanConverter}, UpdateSourceTrigger=Explicit}">
+                                                <Border Height="40" Width="50" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
+                                                    <!--TextBlock Text="Some Icon" VerticalAlignment="Center" TextAlignment="Center"/-->
+                                                    <Image Source="https://image.freepik.com/free-icon/teacher-pointing-a-board-with-a-stick_318-61893.jpg" />
+                                                </Border>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Path=Id}" TextAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Path=FirstName}" TextAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Path=LastName}" TextAlignment="Center"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel IsItemsHost="True"/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                </ListBox>
+                            </GroupBox>
+                        </Expander>
+                        <!--meetTests-->
+                            <Expander IsExpanded="True" Header="{Binding Num3}" DockPanel.Dock="top">
+                            <GroupBox Header="" Background="#FFE5E5E5">
+                                <ListBox Selector.SelectionChanged="lstNames_SelectionChanged" ItemsSource="{Binding Items3}" x:Name="lstNames3">
+                                    <ListBox.Template>
+                                        <ControlTemplate>
+                                            <ItemsPresenter/>
+                                        </ControlTemplate>
+                                    </ListBox.Template>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                                <DockPanel Margin="5" Width="120" Visibility="{Binding Path=TestId, Converter={StaticResource YesNoToBooleanConverter}, UpdateSourceTrigger=Explicit}" Background="{Binding Path=TestGrade, Converter={StaticResource TestToColor}, UpdateSourceTrigger=Explicit}">
+                                                <Border Height="40" Width="50" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
+                                                    <!--TextBlock Text="Some Icon" VerticalAlignment="Center" TextAlignment="Center"/-->
+                                                    <Image Source="https://ficardo-weddings.com//images/simple-car-picture/car-vector-icon-simple-front-car-logo-illustration-white-background-79127558.jpg" />
+                                                </Border>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding Path=TestId}" TextAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Path=StudentId}" TextAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Path=TestAddress}" TextAlignment="Center"/>
+                                                    <TextBlock Text="{Binding Path=TeacherId}" TextAlignment="Center"/>
+
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel IsItemsHost="True"/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                </ListBox>
+                            </GroupBox>
+                        </Expander>
+                        <!--users-->
+                        <Expander Header="{Binding Num4}" DockPanel.Dock="top">
+                            <GroupBox Header="" Background="#FFE5E5E5">
+                                    <ListBox  Selector.SelectionChanged="lstNames_SelectionChanged" ItemsSource="{Binding Items4}" x:Name="lstNames5">
+                                    <ListBox.Template>
+                                        <ControlTemplate>
+                                            <ItemsPresenter/>
+                                        </ControlTemplate>
+                                    </ListBox.Template>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <DockPanel Margin="5" Width="120">
+                                                <Border Height="40" Width="50" BorderBrush="Black" BorderThickness="1" DockPanel.Dock="Left">
+                                                    <!--TextBlock Text="Some Icon" VerticalAlignment="Center" TextAlignment="Center"/-->
+                                                    <Image Source="http://czechpoints.com/wp-content/uploads/2017/10/facebook-anonymous-app.jpg" />
+                                                </Border>
+                                                <StackPanel>
+                                                    <TextBlock Text="{Binding}" TextAlignment="Center"/>
+                                                </StackPanel>
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel IsItemsHost="True"/>
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                </ListBox>
+                            </GroupBox>
+                        </Expander>
+                    </DockPanel>
+                   </DockPanel>
+                </ScrollViewer>
+            </GroupBox>
+            
+        </DockPanel>
+    </Grid>
+</Window>

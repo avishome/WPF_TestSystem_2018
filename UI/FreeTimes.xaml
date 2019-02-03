@@ -1,0 +1,70 @@
+﻿<Window x:Class="UI.FreeTimes"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:UI"
+        mc:Ignorable="d"
+        Title="FreeTimes" Height="450" Width="800">
+    <Grid>
+        <DockPanel>
+            
+        <DatePicker SelectedDateChanged="Selectime_SelectedDateChanged"  DockPanel.Dock="Top" x:Name="Selectime" />
+            <ListView 
+          HorizontalAlignment="Left" 
+          Name="dataGrid1" 
+          VerticalAlignment="Top" 
+          Margin="0,0,-103,0"
+         SelectionMode="Single">
+                <ListView.View>
+                    <GridView>
+                        <GridView.Columns>
+                            <GridViewColumn x:Name="hour">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Label Content="{Binding Path=HH}"></Label>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn x:Name="Sun">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Tag="{Binding Path=ADate}" Click="button_Click" IsEnabled="{Binding Path=A}" Content="{Binding Path=A}"></Button>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn x:Name="Man" Header="MonDay">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Tag="{Binding Path=BDate}" Click="button_Click" IsEnabled="{Binding Path=B}" Content="{Binding Path=B}"></Button>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn x:Name="Tus" Header="Tuesday">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Tag="{Binding Path=CDate}" Click="button_Click" IsEnabled="{Binding Path=C}" Content="{Binding Path=C}"></Button>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn x:Name="wed" Header="Wednesday">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Tag="{Binding Path=DDate}" Click="button_Click" IsEnabled="{Binding Path=D}" Content="{Binding Path=D}"></Button>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn x:Name="thu" Header="Thursday">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Tag="{Binding Path=EDate}" Click="button_Click" IsEnabled="{Binding Path=E}" Content="{Binding Path=E}"></Button>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView.Columns>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </DockPanel>
+    </Grid>
+</Window>
